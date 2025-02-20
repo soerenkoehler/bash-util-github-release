@@ -1,0 +1,24 @@
+name: bash-util-github-release
+
+on:
+  push
+
+jobs:
+  build-and-release:
+    name: build and release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3.5.3
+
+      - name: "build: create some release artifacts"
+        run: |
+          mkdir ./dist
+          printf "dummy" >./dist/file1.zip
+          printf "dummy" >./dist/file2.exe
+
+      - name: "deploy: create release and upload artifacts"
+        run: ./github-release.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
