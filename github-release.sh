@@ -36,7 +36,7 @@ create_release_nightly() {
 create_release_prod() {
     EXISTING=$(gh release list \
         --json tagName \
-        --jq '[.[] | select(.tagName == $RELEASE).tagName][0]')
+        --jq "[.[] | select(.tagName == $RELEASE).tagName][0]")
 
     if [[ -z $EXISTING ]]; then
         printf "create new release '%s'\n" $RELEASE
