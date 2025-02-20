@@ -22,9 +22,9 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
         --cleanup-tag \
         --yes \
         $RELEASE \
-        2>/dev/null \
-    || gh release create \
-        -t "Nightly-$(date -I)" \
+        2>/dev/null || true
+    |gh release create \
+        -t "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
         --target $GITHUB_REF \
         --latest=false \
         $RELEASE
