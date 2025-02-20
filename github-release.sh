@@ -25,15 +25,16 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
         2>/dev/null || true
 
     # Workaround for https://github.com/cli/cli/issues/8458
+    print "waiting for tag to be deleted\n"
     while git fetch --tags --prune-tags; git tag -l | grep $RELEASE; do
         sleep 10;
+        printf "still waiting...\n"
     done
 
     gh release create \
         --title "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
         --target $GITHUB_REF \
         --latest=false \
-        --draft=false \
         $RELEASE
 fi
 
