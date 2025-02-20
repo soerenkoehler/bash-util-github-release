@@ -70,7 +70,7 @@ fi
 
 ls -al
 
-ls -al ./dist
+ls -al $DISTDIR
 
 if [[ -e $DISTDIR ]]; then
     upload_artifacts

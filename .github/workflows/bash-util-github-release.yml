@@ -17,7 +17,7 @@ jobs:
           mkdir ./dist
           touch ./dist/file1.zip
           touch ./dist/file2.exe
-          dir ./dist
+          ls -al ./dist
 
       - name: create release and upload artifacts
         run: ./github-release.sh
