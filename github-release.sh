@@ -23,7 +23,7 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
         --yes \
         $RELEASE \
         2>/dev/null || true
-    |gh release create \
+    gh release create \
         -t "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
         --target $GITHUB_REF \
         --latest=false \
