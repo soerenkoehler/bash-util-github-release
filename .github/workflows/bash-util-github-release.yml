@@ -15,9 +15,8 @@ jobs:
       - name: create some release artifacts
         run: |
           mkdir ./dist
-          touch ./dist/file1.zip
-          touch ./dist/file2.exe
-          ls -al ./dist
+          printf "dummy" >./dist/file1.zip
+          printf "dummy" >./dist/file2.exe
 
       - name: create release and upload artifacts
         run: ./github-release.sh
