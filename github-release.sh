@@ -1,23 +1,13 @@
 #!/bin/bash
 
-printf "verify github auth status:\n"
-gh auth status
-
-if [[ $GITHUB_REF_TYPE == 'tag' ]]; then
-
-    printf "create stable release %s (will fail if exists)\n" $GITHUB_REF_NAME
-
-    RELEASE=$GITHUB_REF_NAME
-    gh release create \
-        --title $RELEASE \
-        --verify-tag \
-        $RELEASE
-
-elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
-
-    printf "create nightly release on branch %s (will delete old release if exists)\n" $GITHUB_REF_NAME
-
+fetch_tags() {
     git fetch --tags --prune-tags; git tag -l
+}
+
+create_release_nightly() {
+    printf "create/replace release 'nightly' on branch %s\n" $GITHUB_REF_NAME
+
+    fetch_tags
 
     RELEASE=nightly
     gh release delete \
@@ -28,22 +18,58 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
 
     # Workaround for https://github.com/cli/cli/issues/8458
     printf "waiting for tag to be deleted\n"
-    while git fetch --tags --prune-tags; git tag -l | grep $RELEASE; do
+    while fetch_tags | grep $RELEASE; do
         sleep 10;
         printf "still waiting...\n"
     done
 
-    git fetch --tags --prune-tags; git tag -l
+    fetch_tags
 
     gh release create \
-        --title "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
+        --title "Nightly" \
+        --notes "$(date +'%Y-%m-%d %H:%M:%S')" \
         --target $GITHUB_REF \
         --latest=false \
         $RELEASE
+}
+
+create_release_prod() {
+    EXISTING=$(gh release list \
+        --json tagName \
+        --jq '[.[] | select(.tagName == $RELEASE).tagName][0]')
+
+    if [[ -z $EXISTING ]]; then
+        printf "create new release '%s'\n" $RELEASE
+        gh release create \
+            --title $RELEASE \
+            --notes "$(date +'%Y-%m-%d %H:%M:%S')" \
+            --verify-tag \
+            $RELEASE
+    else
+        printf "use existing release '%s'\n" $RELEASE
+    fi
+}
+
+upload_artifacts() {
+    printf "uploading artifacts to '%s'\n" $RELEASE
+
+    gh release upload --clobber $RELEASE $DISTDIR/*
+}
+
+$DISTDIR="./dist"
+
+printf "verify github auth status:\n%s\n\n" $(gh auth status)
+
+if [[ $GITHUB_REF_TYPE == 'tag' ]]; then
+    RELEASE=$GITHUB_REF_NAME
+    create_release_prod
+elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
+    RELEASE="nightly"
+    create_release_nightly
 fi
 
-if [[ -e ./dist ]]; then
-    printf "found ./dist folder => uploading artifacts to %s\n" $RELEASE
+if [[ -e $DISTDIR ]]; then
+    upload_artifacts
 else
     printf "no artifacts to upload\n"
 fi
