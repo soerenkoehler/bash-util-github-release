@@ -9,7 +9,7 @@ if [[ $GITHUB_REF_TYPE == 'tag' ]]; then
 
     RELEASE=$GITHUB_REF_NAME
     gh release create \
-        -t $RELEASE \
+        --title $RELEASE \
         --verify-tag \
         $RELEASE
 
@@ -24,9 +24,10 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
         $RELEASE \
         2>/dev/null || true
     gh release create \
-        -t "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
+        --title "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
         --target $GITHUB_REF \
         --latest=false \
+        --draft=false \
         $RELEASE
 fi
 
