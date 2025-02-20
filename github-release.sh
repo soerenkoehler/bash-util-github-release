@@ -56,7 +56,7 @@ upload_artifacts() {
     gh release upload --clobber $RELEASE $DISTDIR/*
 }
 
-$DISTDIR="./dist"
+DISTDIR="./dist"
 
 printf "verify github auth status:\n%s\n\n" "$(gh auth status)"
 
@@ -67,10 +67,6 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
     RELEASE="nightly"
     create_release_nightly
 fi
-
-ls -al
-
-ls -al $DISTDIR
 
 if [[ -e $DISTDIR ]]; then
     upload_artifacts
