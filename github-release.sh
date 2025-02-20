@@ -17,6 +17,8 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
 
     printf "create nightly release on branch %s (will delete old release if exists)\n" $GITHUB_REF_NAME
 
+    git fetch --tags --prune-tags; git tag -l
+
     RELEASE=nightly
     gh release delete \
         --cleanup-tag \
