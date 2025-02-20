@@ -13,7 +13,7 @@ printf "\ntrigger action:\n%s\n%s\n%s\n" \
 
 if [[ $GITHUB_REF_TYPE == 'tag' ]]; then
     printf "TODO: create stable release\n"
-elif [[ $GITHUB_REF_TYPE == 'branch' ]]
+elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
     printf "TODO: create nightly release\n"
 fi
 
