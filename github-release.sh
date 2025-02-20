@@ -33,6 +33,8 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
         printf "still waiting...\n"
     done
 
+    git fetch --tags --prune-tags; git tag -l
+
     gh release create \
         --title "Nightly-$(date +'%Y-%m-%d %H:%M:%S')" \
         --target $GITHUB_REF \
