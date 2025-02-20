@@ -12,7 +12,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3.5.3
 
-      - name: github release
+      - name: create some release artifacts
+        run: |
+          mkdir ./dist
+          touch ./dist/file1.zip
+          touch ./dist/file2.exe
+
+      - name: create release and upload artifacts
         run: ./github-release.sh
         env:
           GH_TOKEN: ${{ github.token }}
