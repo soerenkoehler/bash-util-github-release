@@ -58,7 +58,7 @@ upload_artifacts() {
 
 $DISTDIR="./dist"
 
-printf "verify github auth status:\n%s\n\n" $(gh auth status)
+printf "verify github auth status:\n%s\n\n" "$(gh auth status)"
 
 if [[ $GITHUB_REF_TYPE == 'tag' ]]; then
     RELEASE=$GITHUB_REF_NAME
@@ -67,6 +67,10 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
     RELEASE="nightly"
     create_release_nightly
 fi
+
+ls -al
+
+ls -al ./dist
 
 if [[ -e $DISTDIR ]]; then
     upload_artifacts
