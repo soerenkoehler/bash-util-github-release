@@ -15,7 +15,8 @@ jobs:
       - name: gh status
         run: |
           gh auth status
-          VERSION="v$(grep -E '^version = "(.+)"' Cargo.toml | sed 's/.\+"\(.\+\)"/\1/')"
-          gh release create "$VERSION"
+          # VERSION="v$(grep -E '^version = "(.+)"' Cargo.toml | sed 's/.\+"\(.\+\)"/\1/')"
+          # gh release create "$VERSION"
+          printf "%s\n%s\n%s\n" $GITHUB_REF $GITHUB_REF_NAME $GITHUB_REF_TYPE
         env:
           GH_TOKEN: ${{ github.token }}
