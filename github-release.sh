@@ -21,7 +21,8 @@ elif [[ $GITHUB_REF_TYPE == 'branch' ]]; then
     gh release delete \
         --cleanup-tag \
         --yes \
-        "$RELEASE" \
+        $RELEASE \
+        2>/dev/null \
     || gh release create \
         -t "Nightly-$(date -I)" \
         --target $GITHUB_REF \
@@ -31,4 +32,6 @@ fi
 
 if [[ -e ./dist ]]; then
     printf "found ./dist folder => uploading artifacts to %s\n" $RELEASE
+else
+    printf "no artifacts to upload\n"
 fi
