@@ -1,4 +1,4 @@
-name: rs-util-github-release
+name: bash-util-github-release
 
 on:
   push
