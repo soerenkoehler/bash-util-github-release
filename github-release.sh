@@ -1,7 +1,7 @@
 #!/bin/bash
 
 fetch_tags() {
-    git fetch --tags --prune-tags; git tag -l
+    git fetch --all --force --tags --prune-tags --prune
 }
 
 create_release_nightly() {
@@ -18,7 +18,7 @@ create_release_nightly() {
 
     # Workaround for https://github.com/cli/cli/issues/8458
     printf "waiting for tag to be deleted\n"
-    while fetch_tags | grep $RELEASE; do
+    while fetch_tags; git tag -l | grep $RELEASE; do
         sleep 10;
         printf "still waiting...\n"
     done
@@ -31,6 +31,8 @@ create_release_nightly() {
         --target $GITHUB_REF \
         --latest=false \
         $RELEASE
+
+    fetch_tags
 }
 
 create_release_prod() {
