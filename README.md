@@ -1,2 +1,3 @@
-# rs-util-github-release
-A tool for creating Github releases with artifacts.
+# bash-util-github-release
+
+A template for creating Github releases with artifacts.
