@@ -12,10 +12,10 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3.5.3
 
-      - name: env
-        run: printenv | sort
-
       - name: gh status
-        run: gh auth status
+        run: |
+          gh auth status
+          VERSION="v$(grep -E '^version = "(.+)"' Cargo.toml | sed 's/.\+"\(.\+\)"/\1/')"
+          gh release create "$VERSION"
         env:
           GH_TOKEN: ${{ github.token }}
