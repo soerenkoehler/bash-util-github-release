@@ -4,5 +4,8 @@
             "path": "."
         }
     ],
-    "settings": {}
+    "settings": {
+        "telemetry.editStats.enabled": false,
+        "telemetry.feedback.enabled": false,
+    }
 }
